@@ -1,15 +1,29 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-	<style>body{font-family:'Microsoft YaHei UI','Microsoft JHengHei UI',sans-serif}</style>
-	<meta charset="UTF-8">
-	<title>度娘盘分享守护程序</title>
-</head>
-<body>
-	<h1>度娘盘分享守护程序</h1>
-	<p>by 虹原翼</p>
-	<p><a href="https://github.com/NijiharaTsubasa/BaiduPanAutoReshare" target="_blank">本程序已在GitHub上开源</a></p>
-<?php
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>跳转中...</title>
+        <style>
+        .loader-wrap{width:100%;height:100%;position:fixed;overflow:hidden;background-color:#fafafa;-webkit-transition:all 0.6s cubic-bezier(0.694,  0.048, 0.335, 1.000);transition:all 0.6s cubic-bezier(0.694,  0.048, 0.335, 1.000);-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0);opacity:1;z-index:1000}.loader-wrap.loaded {-webkit-transform:translateY(110%);-ms-transform:translateY(110%);transform:translateY(110%);}.noter{position:absolute;top:60%;left:50%;opacity:1;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-transition:opacity 0.3s ease;transition:opacity 0.3s ease}
+            
+            .footer{position:absolute;top:100%;margin-top:-25px;width:250px;font-size:10px;height:10px;left:100%;margin-left:-265px;text-align:right;color:#333}
+            
+            .loader{position:absolute;top:50%;left:50%;opacity:1;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-transition:opacity 0.3s ease;transition:opacity 0.3s ease}.loaded .loader{opacity:0}.spinner{-webkit-animation:rotator 1.4s linear infinite;animation:rotator 1.4s linear infinite}@-webkit-keyframes rotator{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(270deg);transform:rotate(270deg)}}@keyframes rotator{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(270deg);transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;-webkit-transform-origin:center;-ms-transform-origin:center;transform-origin:center;-webkit-animation:dash 1.4s ease-in-out infinite,colors 5.6s ease-in-out infinite;animation:dash 1.4s ease-in-out infinite,colors 5.6s ease-in-out infinite}@-webkit-keyframes colors{0%,100%{stroke:#4285F4}25%{stroke:#DE3E35}50%{stroke:#F7C223}75%{stroke:#1B9A59}}@keyframes colors{0%,100%{stroke:#4285F4}25%{stroke:#DE3E35}50%{stroke:#F7C223}75%{stroke:#1B9A59}}@-webkit-keyframes dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;-webkit-transform:rotate(135deg);transform:rotate(135deg)}100%{stroke-dashoffset:187;-webkit-transform:rotate(450deg);transform:rotate(450deg)}}@keyframes dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;-webkit-transform:rotate(135deg);transform:rotate(135deg)}100%{stroke-dashoffset:187;-webkit-transform:rotate(450deg);transform:rotate(450deg)}}
+        </style>
+    </head>
+    <body>
+    <div class="loader-wrap">
+        <div class="loader">
+            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+               <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
+            
+        </div>
+        <div class="footer"><a href="https://github.com/LimiQS/BPAR_uiPlus">本程序于GitHub开源</a> (C) 2015 LimiQS &amp; 灵梦御所</div>
+        <div class="noter">
+                <?php
 include_once('common.php');
 
 if (isset($_SERVER['QUERY_STRING']) && strpos($_SERVER['QUERY_STRING'], '&') !== false) {
@@ -20,7 +34,7 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 	try {
 		$mysql=new PDO("mysql:host=$host;dbname=$db",$user,$pass);
 	}catch(PDOException $e) {
-		echo '<h1>错误：无法连接数据库</h1>';
+		echo '错误：无法连接数据库';
 		die();
 	}
 	$mysql->query('set names utf8');
@@ -41,13 +55,13 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 	}
 	$res=$res->fetch();
 	if(empty($res)) {
-		echo '<h1>错误：找不到编号为'.$_SERVER['QUERY_STRING'].'的记录</h1>';
+		echo '错误：找不到编号为'.$_SERVER['QUERY_STRING'].'的记录';
 		die();
 	}
 	$token=getBaiduToken($res['cookie'],$res['username']);
 	$meta = getFileMeta($res['name'], $token, $res['cookie']);
 	if ($meta === false) {
-		echo '<h1>文件不存在QuQ</h1>';
+		echo '文件不存在QuQ';
 		$mysql->exec('update watchlist set failed=3 where id='.$_SERVER['QUERY_STRING']);
 		die();
 	} else if ($enable_direct_link && (!isset($_GET['nodirectdownload']) || $res['link'] == '/s/notallow')) {
@@ -98,10 +112,10 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 				$mysql->query("insert into block_list values({$_SERVER['QUERY_STRING']}, '".json_encode($meta['info'][0]['block_list'])."')");
 			}
 			$mysql->exec('update watchlist set failed=0 where id='.$_SERVER['QUERY_STRING']); //之前不知道抽什么风莫名其妙标记温馨提示
-			echo '若没有自动跳转, <a href="' . $check['url'] .(($res['pass']!=='0')? ('#' .$res['pass']) :''). '">点我手动跳转</a>。
+			echo '若没有自动跳转, <a href="' . $check['url'] .(($res['pass']!=='0')? ('#' .$res['pass']) :''). '">点我手动跳转</a>.
 				<script>window.onload=function(){window.location="' . $check['url'] .(($res['pass']!=='0')? ('#' .$res['pass']) :''). '"};</script>';
 		} elseif(!$check['user_valid']) {
-			echo '<h1>用户登录失效</h1>';
+			echo '用户登录失效';
 			wlog('记录ID '.$_SERVER['QUERY_STRING'].'在补档时登录信息失效', 2);
 			die();
 		} elseif(!$check['valid']) {
@@ -138,10 +152,10 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 							if ($current_md5_key == count($res['usermd5']) - 1) {
 								if (!isset($change_md5)) {
 									wlog('记录ID '.$_SERVER['QUERY_STRING'].'被温馨提示，备用MD5不够', 2);
-									echo '<h1>这个文件被温馨提示了……自动补档没能救活qwq请联系上传者！<br />如果您是上传者，请在后台添加一个新的补档MD5，说不定能救活。</h1>';
+									echo '这个文件被温馨提示了……自动补档没能救活qwq请联系上传者!(错误:缺少MD5)';
 								} else {
 									wlog('记录ID '.$_SERVER['QUERY_STRING'].'被温馨提示，更换补档MD5仍补档失败', 2);
-									echo '<h1>这个文件被温馨提示了……自动补档用了专救温馨提示的方法仍然没能救活qwq请联系上传者！</h1>';
+									echo '这个文件被温馨提示了……自动补档用了专救温馨提示的方法仍然没能救活qwq请联系上传者!';
 								}
 								die();
 							} else {
@@ -184,7 +198,7 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 				));
 
 				if (isset($json -> errno) && $json -> errno !== 0) {
-					echo '<h1>补档娘更名失败错误代码：'.$json -> errno.'</h1>';
+					echo '补档娘更名失败错误代码：'.$json -> errno.'.';
 					wlog('记录ID '.$_SERVER['QUERY_STRING'].'重命名失败', 2);
 					$mysql->exec('update watchlist set failed=1 where id='.$_SERVER['QUERY_STRING']);
 					die();
@@ -193,35 +207,24 @@ if (isset($_SERVER['QUERY_STRING']) && ctype_digit($_SERVER['QUERY_STRING'])) {
 			}
 			$result=createShare($res['fid'],$res['pass'],$token,$res['cookie']);
 			if (!$result) {
-				echo '<h1>补档娘分享失败</h1>';
+				echo '补档娘分享失败';
 				wlog('记录ID '.$_SERVER['QUERY_STRING'].'补档失败：分享失败', 2);
 				$mysql->exec('update watchlist set failed=1 where id='.$_SERVER['QUERY_STRING']);
 				die();
 			}
-			echo '<script>alert("您访问的文件已经失效，但是我们进行了自动补档，提取码不变。\n本文件已自动补档'
-					. ($res['count'] + 1)
-					. '次，本次补档方式：'.(($need_rename)?'重命名':(isset($change_md5) ? '救活温馨提示' : '更换MD5')).'补档");window.location="'
-					. $result .(($res['pass']!=='0')? ('#' . $res['pass']) :''). '";</script>';
-			echo '若没有自动跳转, <a href="' . $check['url'] .(($res['pass']!=='0')? ('#' .$res['pass']) :''). '">点我手动跳转</a>。';
+//			echo '<script>alert("您访问的文件已经失效，但是我们进行了自动补档，提取码不变。\n本文件已自动补档'
+//					. ($res['count'] + 1)
+//					. '次，本次补档方式：'.(($need_rename)?'重命名':(isset($change_md5) ? '救活温馨提示' : '更换MD5')).'补档");window.location="'
+//					. $result .(($res['pass']!=='0')? ('#' . $res['pass']) :''). '";</script>';
+			echo '若无自动跳转, <a href="' . $check['url'] .(($res['pass']!=='0')? ('#' .$res['pass']) :''). '">点我手动跳转</a>。';
 			$result=substr($result,20);
 			$mysql->prepare('update watchlist set count=count+1,link=? where id=?')->execute(array($result,$res['id']));
 			wlog('记录ID '.$_SERVER['QUERY_STRING'].'补档成功');
 			$mysql->exec('update watchlist set failed=0 where id='.$_SERVER['QUERY_STRING']);
 		}
 	}
-} else { ?>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-	<style>body{font-family:'Microsoft YaHei UI','Microsoft JHengHei UI',sans-serif}</style>
-	<meta charset="UTF-8">
-	<title>度娘盘分享守护程序</title>
-</head>
-<body>
-	<h1>度娘盘分享守护程序</h1>
-	<p>by 虹原翼</p>
-	<p>9月19日升级：支持更换除8秒视频外任何文件的MD5</p>
-	<h2>未指定要提取的文件！</h2>
-<?php } ?>
-</body>
-</html>
+} else { echo '未指定要提取的文件'; }?>
+        </div>
+    </div>
+    </body>
+    </html>
