@@ -1,12 +1,11 @@
 # 度娘盘分享守护程序
 
-by 虹原翼
+by LimiQS & 虹原翼
 
-当前[绅士仓库](http://galacg.me/)正在使用这款自动补档程序。
+当前[灵梦御所](http://reimu.net/)正在使用这款自动补档程序。
 
+Fork自[NijiharaTsubasa/BaiduPanAutoReshare](https://github.com/NijiharaTsubasa/BaiduPanAutoReshare)
 
-
-(I'll be glad if you can help me translate README.md into English)
 
 ## 功能：
 
@@ -67,3 +66,7 @@ abc（分享失败）
 μ's（含有双字节字符，分享成功，但提取会失败）**本程序不能检测出此种提取码**，请自己注意不要使用
 
 μμ（含有双字节字符，分享成功，但提取会失败）**本程序不能检测出此种提取码**，请自己注意不要使用
+
+## 修改说明
+
+jump.php的UI更新
