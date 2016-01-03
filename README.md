@@ -69,4 +69,5 @@ abc（分享失败）
 
 ## 修改说明
 
-jump.php的UI更新
+bd/jump.php的UI更新
+bd-admin/browse.php一处代码编写错误
