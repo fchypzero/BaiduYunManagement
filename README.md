@@ -6,6 +6,13 @@ by LimiQS & 虹原翼
 
 Fork自[NijiharaTsubasa/BaiduPanAutoReshare](https://github.com/NijiharaTsubasa/BaiduPanAutoReshare)
 
+## 修改说明
+
+前台界面完全重新设计
+
+BUG修正
+
+几处杂项修改
 
 ## 功能：
 
@@ -67,8 +74,3 @@ abc（分享失败）
 
 μμ（含有双字节字符，分享成功，但提取会失败）**本程序不能检测出此种提取码**，请自己注意不要使用
 
-## 修改说明
-
-bd/jump.php的UI更新
-
-bd-admin/browse.php一处代码编写错误
