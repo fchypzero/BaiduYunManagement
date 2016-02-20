@@ -4,7 +4,7 @@ by LimiQS & 虹原翼
 
 当前[灵梦御所](http://reimu.net/)正在使用这款自动补档程序。
 
-Fork自[NijiharaTsubasa/BaiduPanAutoReshare](https://github.com/NijiharaTsubasa/BaiduPanAutoReshare)
+本程序使用__GPL__许可证发布
 
 ## 修改说明
 
@@ -74,3 +74,6 @@ abc（分享失败）
 
 μμ（含有双字节字符，分享成功，但提取会失败）**本程序不能检测出此种提取码**，请自己注意不要使用
 
+## 说明
+
+Fork并修改自[NijiharaTsubasa/BaiduPanAutoReshare](https://github.com/NijiharaTsubasa/BaiduPanAutoReshare)
